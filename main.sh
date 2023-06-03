@@ -11,6 +11,7 @@ fi
 
 ROOT="$1"
 
+mkdir -p $ROOT/{dev,proc,sys,run}
 mount --bind /dev $ROOT/dev
 mount --bind /dev/pts $ROOT/dev/pts
 mount -t proc proc $ROOT/proc
@@ -18,7 +19,7 @@ mount -t sysfs sysfs $ROOT/sys
 mount -t tmpfs tmpfs $ROOT/run
 
 if [ -h $ROOT/dev/shm ]; then
-    mkdir -pv $ROOT/$(readlink $ROOT/dev/shm)
+    mkdir -p $ROOT/$(readlink $ROOT/dev/shm)
 else
     mount -t tmpfs -o nosuid,nodev tmpfs $ROOT/dev/shm
 fi
