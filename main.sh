@@ -30,3 +30,7 @@ chroot "$ROOT" /usr/bin/env -i \
     PS1='(yumei-chroot) \u:\w\$ ' \
     PATH=/usr/bin:/usr/sbin \
     /bin/bash --login
+
+umount $ROOT/dev/pts
+mountpoint -q $ROOT/dev/shm && umount $ROOT/dev/shm
+umount $ROOT/{dev,run,proc,sys}
