@@ -12,17 +12,13 @@ fi
 ROOT="$1"
 
 mkdir -p $ROOT/{dev,proc,sys,run}
-mount --bind /dev $ROOT/dev
-mount --bind /dev/pts $ROOT/dev/pts
-mount -t proc proc $ROOT/proc
-mount -t sysfs sysfs $ROOT/sys
-mount -t tmpfs tmpfs $ROOT/run
-
-if [ -h $ROOT/dev/shm ]; then
-    mkdir -p $ROOT/$(readlink $ROOT/dev/shm)
-else
-    mount -t tmpfs -o nosuid,nodev tmpfs $ROOT/dev/shm
-fi
+mount --types proc /proc $ROOT/proc
+mount --rbind /sys $ROOT/sys
+mount --make-rslave $ROOT/sys
+mount --rbind /dev $ROOT/dev
+mount --make-rslave $ROOT/dev
+mount --bind /run $ROOT/run
+mount --make-slave $ROOT/run
 
 chroot "$ROOT" /usr/bin/env -i \
     HOME=/root \
